@@ -17,6 +17,8 @@ vermelho = (255,0,0)
 azul = (0,0,255)
 verde = (0,255,0)
 
+cor = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
 tamanho_fonte = 50
 fonte = pygame.font.SysFont(None, tamanho_fonte)
 
