@@ -8,7 +8,7 @@ class Game:
         self.largura = 800
         self.altura = 600
         self.tela = pygame.display.set_mode((self.largura, self.altura))
-        self.pygame.set_caption("Bate-Bate")
+        pygame.display.set_caption("Bate-Bate")
         self.clock = pygame.time.Clock()
         self.MovendoTexto = MovendoTexto("Cassiano", 50, self.largura, self.altura)
     
@@ -20,10 +20,10 @@ class Game:
                     rodando = False
 
             self.MovendoTexto.move()
-            self.telafill((0, 0, 0))
+            self.tela.fill((0, 0, 0))
             self.tela.blit(self.MovendoTexto.texto_surf, self.MovendoTexto.rect)
             pygame.display.flip()
-            self.clock.tick(60)
+            self.clock.tick(300)
 
         pygame.quit()
         sys.exit()
