@@ -13,16 +13,16 @@ class Game: # cria a classe Game
         self.MovendoTexto = MovendoTexto("Cassiano", 50, self.largura, self.altura) # define o atributo MovendoTexto com a classe MovendoTexto do arquivo MecMovimento e informa valores para os atributos deste
     
     def run(self): # cria o método run() desta classe
-        rodando = True
-        while rodando:
-            for evento in pygame.event.get():
-                if evento.type == pygame.QUIT:
-                    rodando = False
+        rodando = True # declara a variavel rodando e atribui a ela o valor True
+        while rodando: # inicia um loop while que vai executar enquanto rodando tiver o valor True
+            for evento in pygame.event.get(): # inicia um loop for que executa a cada evento pygame
+                if evento.type == pygame.QUIT: # condicao para quando o evento for do tipo pygame.QUIT
+                    rodando = False # atribui o valor False a variavel rodando
 
             self.MovendoTexto.move() #executa o método move() da classe MovendoTexto
             self.tela.fill((0, 0, 0)) # preenche a tela com a cor preta
-            self.tela.blit(self.MovendoTexto.texto_surf, self.MovendoTexto.rect)
-            pygame.display.flip()
+            self.tela.blit(self.MovendoTexto.texto_surf, self.MovendoTexto.rect) # desenha/copia para a tela os efeitos/desenhos e o local onde ficarão
+            pygame.display.flip() # atualiza a tela com os efeitos ou desenhos
             self.clock.tick(300) # define a taxa de atualização da tela para 300
 
         pygame.quit() # encerra/fecha a tela gerada pelo programa
