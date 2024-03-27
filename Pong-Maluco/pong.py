@@ -3,8 +3,8 @@ import sys
 
 pygame.init()
 
-preto = (0,0,0)
-branco = (255,255,255)
+preto = (0, 0, 0)
+branco = (255, 255, 255)
 
 largura = 800
 altura = 600
@@ -22,11 +22,11 @@ tamanho_bola = 10
 pc_x = 10
 pc_y = altura // 2 - altura_raquete // 2
 
-#Posição da raquete do Player
+# Posição da raquete do Player
 player_1_x = largura - 20
 player_1_y = altura // 2 - altura_raquete // 2
 
-#Posição da bola
+# Posição da bola
 bola_x = largura // 2 - tamanho_bola // 2
 bola_y = altura // 2 - tamanho_bola // 2
 
@@ -45,7 +45,9 @@ while rodando:
 
     pygame.draw.rect(screen, branco, (pc_x, pc_y, largura_raquete, altura_raquete))
 
-    pygame.draw.rect(screen, branco, (player_1_x, player_1_y, largura_raquete, altura_raquete))
+    pygame.draw.rect(
+        screen, branco, (player_1_x, player_1_y, largura_raquete, altura_raquete)
+    )
 
     pygame.draw.ellipse(screen, branco, (bola_x, bola_y, tamanho_bola, tamanho_bola))
 
