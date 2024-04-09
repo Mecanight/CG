@@ -13,7 +13,6 @@ screen = pygame.display.set_mode((largura, altura))
 
 pygame.display.set_caption("Pong")
 
-
 # Definição da Raquete
 largura_raquete = 10
 altura_raquete = 60
@@ -31,25 +30,64 @@ player_1_y = altura // 2 - altura_raquete // 2
 bola_x = largura // 2 - tamanho_bola // 2
 bola_y = altura // 2 - tamanho_bola // 2
 
-raquete_player_1_dy = 5
-raquete_pc_dy = 5
+# Velocidade das raquetes
+raquete_player_1_dy = 10
+raquete_pc_dy = 10
 
-# velocidade da bola
+# Velocidade da bola
 velocidade_bola_x = 5
 velocidade_bola_y = 5
 
-ponto_player = 0
-ponto_pc = 0
-
-clock = pygame.time.Clock()
-
+# Gerar 02 números aleatórios
 aleat1 = random.randint(-31, 31)
 aleat2 = random.randint(-31, 31)
 
-rodando = True
+# Inicializando a pontuação dos jogadores
+score_player_1 = 0
+score_pc = 0
+
+font_file = "Pong-Maluco/font/PressStart2P-Regular.ttf"
+font = pygame.font.Font(font_file, 36)
+
+clock = pygame.time.Clock()
+
+rodando = False
+
+
+def menu_principal():
+    global rodando
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    rodando = True
+                    return
+
+        # Renderiza o texto do menu
+        screen.fill(preto)
+        texto_menu = font.render("Pong", True, branco)
+        text_menu_rect = texto_menu.get_rect(center=(largura // 2, altura // 2))
+        screen.blit(texto_menu, text_menu_rect)
+
+        tempo = pygame.time.get_ticks()
+        # Pressionou Space para jogar:
+        if tempo % 2000 < 1000:
+            texto_iniciar = font.render("Pressione Espaço", True, branco)
+            texto_iniciar_rect = texto_iniciar.get_rect(center=(largura // 2, 450))
+            screen.blit(texto_iniciar, texto_iniciar_rect)
+
+        pygame.display.flip()
+
+
+menu_principal()
+
 while rodando:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        keys = pygame.key.get_pressed()
+        if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
             rodando = False
 
     screen.fill(preto)
@@ -83,33 +121,49 @@ while rodando:
 
     # Reposivionar a bola quando ela passar/sair as bordas laterais
     if bola_x > largura:
-        ponto_pc += 1
         bola_x = largura // 2 - tamanho_bola // 2
         bola_y = altura // 2 - tamanho_bola
         velocidade_bola_x = -velocidade_bola_x
+        score_pc += 1
+        print(f"Score PC: {score_pc}")
+
     if bola_x < 0:
-        ponto_player += 1
         bola_x = largura // 2 - tamanho_bola // 2
         bola_y = altura // 2 - tamanho_bola
         velocidade_bola_x = -velocidade_bola_x
+        score_player_1 += 1
+        print(f"Score Player 1: {score_player_1}")
 
     # Movendo a raquete do pc pra seguir a bola
-    if pc_y + altura_raquete // 2 < bola_y:
-        pc_y += raquete_pc_dy
-    elif pc_y + altura_raquete // 2 > bola_y:
-        pc_y -= raquete_pc_dy
+    if bola_x <= largura // 2:
+        if pc_y + altura_raquete // 2 < bola_y:
+            pc_y += raquete_pc_dy
+        elif pc_y + altura_raquete // 2 > bola_y:
+            pc_y -= raquete_pc_dy
 
     # Movendo a raquete do player_1 pra seguir a bola
-    if player_1_y + altura_raquete // 2 < bola_y:
-        player_1_y += raquete_pc_dy
-    elif player_1_y + altura_raquete // 2 > bola_y:
-        player_1_y -= raquete_pc_dy
+    # if player_1_y + altura_raquete // 2 < bola_y:
+    #     player_1_y += raquete_pc_dy
+    # elif player_1_y + altura_raquete // 2 > bola_y:
+    #     player_1_y -= raquete_pc_dy
 
     # Evitar que a raquete do pc saia da área da tela
     if pc_y < 0:
         pc_y = 0
     elif pc_y > altura - altura_raquete:
         pc_y = altura - altura_raquete
+
+    # Mostrando Score do jogo
+    fonte_score = pygame.font.Font(font_file, 16)
+
+    score_texto_pc = fonte_score.render(f"Score PC: {score_pc}", True, branco)
+    score_texto_py = fonte_score.render(f"Score Player: {score_player_1}", True, branco)
+
+    score_rect_pc = score_texto_pc.get_rect(center=(200, 18))
+    score_rect_py = score_texto_py.get_rect(center=(600, 18))
+
+    screen.blit(score_texto_pc, score_rect_pc)
+    screen.blit(score_texto_py, score_rect_py)
 
     pygame.draw.rect(screen, branco, (pc_x, pc_y, largura_raquete, altura_raquete))
 
@@ -118,17 +172,18 @@ while rodando:
     )
 
     pygame.draw.ellipse(screen, branco, (bola_x, bola_y, tamanho_bola, tamanho_bola))
+    pygame.draw.aaline(screen, branco, (largura // 2, 0), (largura // 2, altura))
 
     # Para mover a raquete do player com o teclado
-    # keys = pygame.key.get_pressed()
-    # if keys[pygame.K_w] and player_1_y > 0:
-    #     player_1_y -= raquete_player_1_dy
-    # if keys[pygame.K_s] and player_1_y < (altura - altura_raquete):
-    #     player_1_y += raquete_player_1_dy
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_KP_8] and player_1_y > 0:
+        player_1_y -= raquete_player_1_dy
+    if keys[pygame.K_KP_2] and player_1_y < (altura - altura_raquete):
+        player_1_y += raquete_player_1_dy
 
     pygame.display.flip()
 
-    clock.tick(60)
+    clock.tick(30)
 
 pygame.quit()
 sys.exit()
