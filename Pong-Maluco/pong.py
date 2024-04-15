@@ -73,11 +73,14 @@ def menu_principal():
         screen.blit(texto_menu, text_menu_rect)
 
         tempo = pygame.time.get_ticks()
-        # Pressionou Space para jogar:
+        print(tempo)
+        # Pressionou Space para jogar
         if tempo % 2000 < 1000:
             texto_iniciar = font.render("Pressione Espaço", True, branco)
             texto_iniciar_rect = texto_iniciar.get_rect(center=(largura // 2, 450))
             screen.blit(texto_iniciar, texto_iniciar_rect)
+
+        clock.tick(1)
 
         pygame.display.flip()
 
