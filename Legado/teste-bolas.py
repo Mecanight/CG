@@ -40,7 +40,6 @@ posicao_y1 = random.randint(0, 600)
 # while velocidade_y == 0:
 #     velocidade_y = random.randint(-1, 1)
 
-
 #Loop principal
 while True:
     for event in pygame.event.get():
